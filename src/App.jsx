@@ -2,19 +2,29 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Guitar from "./components/Guitar";
 import "./App.css";
+import { db } from "./data/db";
 
 function App() {
+  const [data, setData] = useState(db);
+
   return (
     <>
       <Header />
       <main className="container-xl mt-5">
-        <h2 className="text-center">Nuestra Colección</h2>
+        <h2 className="text-center">Our colection</h2>
 
         <div className="row mt-5">
-          <Guitar />
-          <Guitar />
-          <Guitar />
-          <Guitar />
+          {data.map((guitar) => {
+            return (
+              <Guitar
+                key={guitar.id}
+                name={guitar.name}
+                image={guitar.image}
+                description={guitar.description}
+                price={guitar.price}
+              />
+            );
+          })}
         </div>
       </main>
 
