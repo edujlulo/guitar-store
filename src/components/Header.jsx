@@ -1,4 +1,14 @@
-export default function Header() {
+import CartGuitar from "./CartGuitar";
+
+export default function Header({
+  cart,
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+  clearCart,
+}) {
+  const totalToPay = cart.reduce((acc, g) => acc + g.price * g.quantity, 0);
+
   return (
     <header className="py-5 header">
       <div className="container-xl">
@@ -21,51 +31,41 @@ export default function Header() {
               />
 
               <div id="carrito" className="bg-white p-3">
-                <p className="text-center">El carrito esta vacio</p>
-                <table className="w-100 table">
-                  <thead>
-                    <tr>
-                      <th>Imagen</th>
-                      <th>Nombre</th>
-                      <th>Precio</th>
-                      <th>Cantidad</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <img
-                          className="img-fluid"
-                          src="./public/img/guitarra_02.jpg"
-                          alt="imagen guitarra"
+                {cart.length === 0 ? (
+                  <p className="text-center fw-bold">The cart is empty</p>
+                ) : (
+                  <table className="w-100 table">
+                    <thead>
+                      <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cart.map((guitar) => (
+                        <CartGuitar
+                          key={guitar.id}
+                          guitar={guitar}
+                          decreaseQuantity={decreaseQuantity}
+                          increaseQuantity={increaseQuantity}
+                          removeFromCart={removeFromCart}
                         />
-                      </td>
-                      <td>SRV</td>
-                      <td className="fw-bold">$299</td>
-                      <td className="flex align-items-start gap-4">
-                        <button type="button" className="btn btn-dark">
-                          -
-                        </button>
-                        1
-                        <button type="button" className="btn btn-dark">
-                          +
-                        </button>
-                      </td>
-                      <td>
-                        <button className="btn btn-danger" type="button">
-                          X
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
 
                 <p className="text-end">
-                  Total pagar: <span className="fw-bold">$899</span>
+                  Total to pay: <span className="fw-bold">${totalToPay}</span>
                 </p>
-                <button className="btn btn-dark w-100 mt-3 p-2">
-                  Vaciar Carrito
+                <button
+                  className="btn btn-dark w-100 mt-3 p-2"
+                  onClick={() => clearCart()}
+                >
+                  Empty Cart
                 </button>
               </div>
             </div>

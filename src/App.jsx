@@ -6,10 +6,67 @@ import { db } from "./data/db";
 
 function App() {
   const [data, setData] = useState(db);
+  const [cart, setCart] = useState([]);
+
+  // Function for add guitars to cart
+
+  function addGuitarToCart(guitar) {
+    setCart((currentCart) => {
+      const existing = currentCart.find((g) => g.id === guitar.id);
+
+      if (existing) {
+        return currentCart.map((g) =>
+          g.id === guitar.id ? { ...g, quantity: g.quantity + 1 } : g
+        );
+      }
+
+      return [...currentCart, { ...guitar, quantity: 1 }];
+    });
+  }
+
+  // Function for decrease quantity in cart
+
+  function decreaseQuantity(guitarId) {
+    setCart((currentCart) =>
+      currentCart
+        .map((g) =>
+          g.id === guitarId ? { ...g, quantity: g.quantity - 1 } : g
+        )
+        .filter((g) => g.quantity > 0)
+    );
+  }
+
+  // Function for increase quantity in cart
+
+  function increaseQuantity(guitarId) {
+    setCart((currentCart) =>
+      currentCart.map((g) =>
+        g.id === guitarId ? { ...g, quantity: g.quantity + 1 } : g
+      )
+    );
+  }
+
+  // Function for delete guitar in cart
+
+  function removeFromCart(guitarId) {
+    setCart((currentCart) => currentCart.filter((g) => g.id !== guitarId));
+  }
+
+  // Function for empty cart
+
+  function clearCart() {
+    setCart([]);
+  }
 
   return (
     <>
-      <Header />
+      <Header
+        cart={cart}
+        decreaseQuantity={decreaseQuantity}
+        increaseQuantity={increaseQuantity}
+        removeFromCart={removeFromCart}
+        clearCart={clearCart}
+      />
       <main className="container-xl mt-5">
         <h2 className="text-center">Our colection</h2>
 
@@ -18,10 +75,8 @@ function App() {
             return (
               <Guitar
                 key={guitar.id}
-                name={guitar.name}
-                image={guitar.image}
-                description={guitar.description}
-                price={guitar.price}
+                guitar={guitar}
+                addGuitarToCart={addGuitarToCart}
               />
             );
           })}
