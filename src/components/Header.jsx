@@ -7,6 +7,7 @@ export default function Header({
   removeFromCart,
   clearCart,
 }) {
+  const isEmpty = () => cart.length === 0;
   const totalToPay = cart.reduce((acc, g) => acc + g.price * g.quantity, 0);
 
   return (
@@ -31,36 +32,39 @@ export default function Header({
               />
 
               <div id="carrito" className="bg-white p-3">
-                {cart.length === 0 ? (
+                {isEmpty() ? (
                   <p className="text-center fw-bold">The cart is empty</p>
                 ) : (
-                  <table className="w-100 table">
-                    <thead>
-                      <tr>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {cart.map((guitar) => (
-                        <CartGuitar
-                          key={guitar.id}
-                          guitar={guitar}
-                          decreaseQuantity={decreaseQuantity}
-                          increaseQuantity={increaseQuantity}
-                          removeFromCart={removeFromCart}
-                        />
-                      ))}
-                    </tbody>
-                  </table>
-                )}
+                  <>
+                    <table className="w-100 table">
+                      <thead>
+                        <tr>
+                          <th>Image</th>
+                          <th>Name</th>
+                          <th>Price</th>
+                          <th>Quantity</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {cart.map((guitar) => (
+                          <CartGuitar
+                            key={guitar.id}
+                            guitar={guitar}
+                            decreaseQuantity={decreaseQuantity}
+                            increaseQuantity={increaseQuantity}
+                            removeFromCart={removeFromCart}
+                          />
+                        ))}
+                      </tbody>
+                    </table>
 
-                <p className="text-end">
-                  Total to pay: <span className="fw-bold">${totalToPay}</span>
-                </p>
+                    <p className="text-end">
+                      Total to pay:{" "}
+                      <span className="fw-bold">${totalToPay}</span>
+                    </p>
+                  </>
+                )}
                 <button
                   className="btn btn-dark w-100 mt-3 p-2"
                   onClick={() => clearCart()}
