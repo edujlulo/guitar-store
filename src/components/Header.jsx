@@ -9,6 +9,7 @@ export default function Header({
 }) {
   const isEmpty = () => cart.length === 0;
   const totalToPay = cart.reduce((acc, g) => acc + g.price * g.quantity, 0);
+  const numberOfItems = cart.reduce((acc, g) => acc + g.quantity, 0);
 
   return (
     <header className="py-5 header">
@@ -23,13 +24,20 @@ export default function Header({
               />
             </a>
           </div>
-          <nav className="col-md-6 a mt-5 d-flex align-items-start justify-content-end">
-            <div className="carrito">
+          <nav className="col-md-6 a mt-5 d-flex align-items-start justify-content-end me-3">
+            <div className="carrito position-relative">
               <img
                 className="img-fluid"
                 src="./public/img/carrito.png"
                 alt="imagen carrito"
               />
+
+              <span
+                id="number-over-cart"
+                className="position-absolute top-0 start-100 translate-middle d-flex align-items-center justify-content-center"
+              >
+                {numberOfItems}
+              </span>
 
               <div id="carrito" className="bg-white p-3">
                 {isEmpty() ? (
